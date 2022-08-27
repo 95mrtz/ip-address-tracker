@@ -1,0 +1,24 @@
+/* 
+It was very frustrating trying to center with Tailwind CSS on position: absolute hahaha
+*/
+
+.centrar-div {
+    position: absolute;
+    top: 150px;
+    left: 100px;
+    right: 100px;
+    bottom: calc(100vh-240px);
+    margin: auto;
+}
+
+@media only screen and (min-width: 1024px) {
+    .centrar-div {
+        position: absolute;
+        top: 180px;
+        left: 100px;
+        right: 100px;
+        bottom: calc(100vh-240px);
+        margin: auto;
+    }
+}
+

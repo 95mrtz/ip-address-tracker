@@ -16,19 +16,20 @@ const iconMarker = L.icon({
   iconSize: L.point(46, 56),
 });
 
+
+
 const App = () => {
   const [ipAddress, setIpAddress] = useState("");
   const [showData, setShowData] = useState(false);
   const [data, setData] = useState(null);
+  const [coords, setCoords] = useState([37.8025, 122.271]);
 
-
-  const ChangeMap = () => {
+  const ChangeMap = ( { coordenadas} ) => {
     const map = useMap();
-    map.setView([data.location.lat, data.location.lng]);
-    map.flyTo([data.location.lat, data.location.lng], map.getMaxZoom());
+    map.setView(coordenadas, map.getZoom());
     return null;
   };
-  
+
 
   const validateIP = (ip) => {
     const ipRegex =
@@ -42,45 +43,44 @@ const App = () => {
     let busquedaIp = ip;
 
     if (!busquedaIp) {
-      const currentIpResponse = await fetch(
-        "https://api.ipify.org/?format=json"
-      );
+      console.log("entre a busqueda primera vez");
 
-      const { ip: currentIp } = await currentIpResponse.json();
+        const response = await fetch(
+          "https://api.ipify.org/?format=json"
+        );
 
-      busquedaIp = currentIp;
-      console.log(busquedaIp);
+        const { ip: ipActual } = await response.json();
+
+        busquedaIp = ipActual;
+        console.log(busquedaIp);
     }
 
     if (busquedaIp) {
-      console.log("entre a buscar la ip");
-      const isIpAddress = validateIP(busquedaIp);
-      const response = await fetch(
-        `https://geo.ipify.org/api/v2/country,city?apiKey=at_JlF9smATksrkReNyCKG2ei8NSbU2x&${
-          isIpAddress ? "ipAddress=" : "domain="
-        }${busquedaIp.trim()}`
-      );
+        console.log("entre a buscar la ip");
+        const isIpAddress = validateIP(busquedaIp);
+        const response = await fetch(
+          `https://geo.ipify.org/api/v2/country,city?apiKey=at_Qf1CQWKZ3IRwjq383S2VIN4cG8D5k&${
+            isIpAddress ? "ipAddress=" : "domain="
+          }${busquedaIp.trim()}`
+        );
 
-      if (response.ok) {
-        console.log("la respuesta fue ok");
-        const datos = await response.json();
-        setData(datos)
-        console.log("esto es data en function", data);
-      }
+        if (response.ok) {
+          console.log("la respuesta fue ok");
+          const datos = await response.json();
+          setData(datos);
+          setCoords([datos.location.lat, datos.location.lng])
+          setShowData(true)
+        }
 
-      if(!response.ok){
-        alert("el dato recibido no es valido.")
-      }
+        if(!response.ok){
+          alert("Hey!, this is not a IP o a domain!, enter a valid data... idiot.")
+          console.error(response.status);
+        }
     }
   };
 
-  useEffect(() => {  
-   busqueda()
-    console.log("esto es data en useEffect", data);
-    console.log("la busqueda fue un exito");
-    setTimeout( () => {
-      setShowData(true);
-    }, 500)
+  useEffect(() => {
+    busqueda();
   }, []);
 
   const handleChange = (e) => {
@@ -88,19 +88,17 @@ const App = () => {
   };
 
   const handleSubmit = (e) => {
-    console.log("ejecute el handleSubmit")
     e.preventDefault();
     busqueda(ipAddress);
     setTimeout(() => {
-      setIpAddress("")
+      setIpAddress("");
     }, 200);
   };
 
   return (
-    <div>
-      <header className="w-full h-80 z-10 bg-[url('./images/pattern-bg.png')] bg-cover bg-no-repeat flex flex-col justify-center items-center">
-        <h1 className="text-4xl font-bold"> IP Address Tracker</h1>
-        <div className="attribution">
+    <div className="relative">
+      <header className="w-full h-60 z-10 bg-[url('./images/pattern-bg.png')] bg-cover bg-no-repeat flex flex-col justify-start items-center">
+        <div className="invisible lg:visible mt-2">
           Challenge by{" "}
           <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">
             Frontend Mentor
@@ -115,12 +113,14 @@ const App = () => {
           </a>
           .
         </div>
+        <h1 className="text-lg lg:text-4xl font-bold mb-5"> IP Address Tracker</h1>
         <form
-          className="w-96 translate-y-6 flex flex-row"
+          className="w-3/4 lg:w-1/2 flex flex-col justify-center"
           onSubmit={handleSubmit}
         >
-          <input
-            className="p-3 rounded-l-lg w-full"
+          <div className="flex flex-row">
+            <input
+            className="p-3 rounded-l-lg w-full text-sm lg:text-lg"
             type={"text"}
             placeholder="Search for any IP address or domain"
             value={ipAddress}
@@ -129,68 +129,73 @@ const App = () => {
           <button className="px-3 rounded-r-lg bg-gray-900">
             <img src={iconArrow} alt="enviar" />
           </button>
+          </div>
+          <span className="font-light text-center text-sm lg:text-lg">Example: Enter 1.1.1.1 o www.google.com</span>
         </form>
-        <div className="translate-y-28 z-20 flex flex-row bg-slate-50 p-3 rounded-md divide-x-2 divide-zinc-200">
+      </header>
+      <div className="centrar-div z-20 flex text-center lg:text-start flex-col lg:flex-row bg-slate-50 p-1 lg:p-3 rounded-md divide-y-2 lg:divide-y-0 lg:divide-x-2 divide-zinc-200">
           <article className="p-2 mx-3">
-            <p className="text-md mb-7 text-gray-400 uppercase tracking-wide">
+            <p className="text-sm lg:text-md mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
               IP Address
             </p>
-            <h1 className="text-3xl text-gray-900">
+            <h1 className="text-sm lg:text-2xl text-gray-900 text-bold">
               {showData ? `${data.ip}` : "Loading..."}
             </h1>
           </article>
           <article className="p-2 mx-3">
-            <p className="text-md mb-7 text-gray-400 uppercase tracking-wide">
+          <p className="text-sm lg:text-md mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
               Location
             </p>
-            <h1 className="text-3xl text-gray-900">
+            <h1 className="text-sm lg:text-2xl text-gray-900 text-bold">
               {showData
                 ? `${data.location.country}, ${data.location.region}, ${data.location.city}`
                 : "Loading..."}
             </h1>
           </article>
           <article className="p-2 mx-3">
-            <p className="text-md mb-7 text-gray-400 uppercase tracking-wide">
+          <p className="text-sm lg:text-md mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
               Timezone
             </p>
-            <h1 className="text-3xl text-gray-900">
+            <h1 className="text-sm lg:text-2xl text-gray-900 text-bold">
               {showData ? `UTC ${data.location.timezone}` : "Loading..."}
             </h1>
           </article>
           <article className="p-2 mx-3">
-            <p className="text-md mb-7 text-gray-400 uppercase tracking-wide">
+          <p className="text-sm lg:text-md mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
               ISP
             </p>
-            <h1 className="text-3xl text-gray-900">
+            <h1 className="text-sm lg:text-2xl text-gray-900 text-bold">
               {showData ? `${data.isp}` : "Loading..."}
             </h1>
           </article>
         </div>
-      </header>
-      <main className="h-[calc(100vh-320px)] z-0">
-        {data && (
-          <MapContainer
-            center={[data.location.lat, data.location.lng]}
-            zoom={20}
-            scrollWheelZoom={true}
-            className="h-[calc(100vh-320px)] z-0"
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker
-              position={[data.location.lat, data.location.lng]}
-              icon={iconMarker}
+      <main className="h-[calc(100vh-240px)] z-0">
+        {showData ? (
+          data && (
+            <MapContainer
+              center={coords}
+              zoom={15}
+              maxZoom={18}
+              minZoom={1}
+              scrollWheelZoom={true}
+              className="h-[calc(100vh-240px)] z-0"
             >
-              <Popup>{`Latitud: ${data.location.lat} | Longitud: ${data.location.lng}`}</Popup>
-            </Marker>
-
-
-            <ChangeMap />
-
-
-          </MapContainer>
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker
+                
+                position={coords}
+                icon={iconMarker}
+              >
+                <Popup>{`Latitud: ${data.location.lat} | Longitud: ${data.location.lng}`}</Popup>
+              </Marker>
+              <ChangeMap coordenadas={coords} />
+            </MapContainer>
+          )
+        ) : (
+          <p> cargando mapa... </p>
         )}
       </main>
     </div>
