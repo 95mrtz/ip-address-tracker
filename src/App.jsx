@@ -98,7 +98,7 @@ const App = () => {
   return (
     <div className="relative">
       <header className="w-full h-60 z-10 bg-[url('./images/pattern-bg.png')] bg-cover bg-no-repeat flex flex-col justify-start items-center">
-        <div className="invisible lg:visible mt-2">
+        <div className="contribution">
           Challenge by{" "}
           <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">
             Frontend Mentor
@@ -133,38 +133,38 @@ const App = () => {
           <span className="font-light text-center text-sm lg:text-lg">Example: Enter 1.1.1.1 o www.google.com</span>
         </form>
       </header>
-      <div className="centrar-div z-20 flex text-center lg:text-start flex-col lg:flex-row bg-slate-50 p-1 lg:p-3 rounded-md divide-y-2 lg:divide-y-0 lg:divide-x-2 divide-zinc-200">
-          <article className="p-2 mx-3">
-            <p className="text-sm lg:text-md mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
+      <div className="centrar-div z-20 grid grid-rows-2 grid-cols-2 sm:flex sm:flex-col lg:flex-row text-center lg:text-start  bg-slate-50 p-1 lg:p-3 rounded-md divide-y-2 lg:divide-y-0 lg:divide-x-2 divide-zinc-200">
+          <article className="p-2 mx-[4px] sm:mx-3">
+            <p className="text-[10px] sm:text-sm lg:text-md mb-1 sm:mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
               IP Address
             </p>
-            <h1 className="text-sm lg:text-2xl text-gray-900 text-bold">
+            <h1 className="text-[12px] sm:text-sm lg:text-2xl text-gray-900 text-bold">
               {showData ? `${data.ip}` : "Loading..."}
             </h1>
           </article>
-          <article className="p-2 mx-3">
-          <p className="text-sm lg:text-md mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
+          <article className="p-2 mx-[4px] sm:mx-3">
+          <p className="text-[10px] sm:text-sm lg:text-md mb-1 sm:mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
               Location
             </p>
-            <h1 className="text-sm lg:text-2xl text-gray-900 text-bold">
+            <h1 className="text-[12px] sm:text-sm lg:text-2xl text-gray-900 text-bold">
               {showData
                 ? `${data.location.country}, ${data.location.region}, ${data.location.city}`
                 : "Loading..."}
             </h1>
           </article>
-          <article className="p-2 mx-3">
-          <p className="text-sm lg:text-md mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
+          <article className="p-2 mx-[4px] sm:mx-3">
+          <p className="text-[10px] sm:text-sm lg:text-md mb-1 sm:mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
               Timezone
             </p>
-            <h1 className="text-sm lg:text-2xl text-gray-900 text-bold">
+            <h1 className="text-[12px] sm:text-sm lg:text-2xl text-gray-900 text-bold">
               {showData ? `UTC ${data.location.timezone}` : "Loading..."}
             </h1>
           </article>
-          <article className="p-2 mx-3">
-          <p className="text-sm lg:text-md mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
+          <article className="p-2 mx-[4px] sm:mx-3">
+          <p className="text-[10px] sm:text-sm lg:text-md mb-1 sm:mb-3 lg:mb-7 text-gray-400 uppercase tracking-wide">
               ISP
             </p>
-            <h1 className="text-sm lg:text-2xl text-gray-900 text-bold">
+            <h1 className="text-[12px] sm:text-sm lg:text-2xl text-gray-900 text-bold">
               {showData ? `${data.isp}` : "Loading..."}
             </h1>
           </article>
@@ -195,7 +195,7 @@ const App = () => {
             </MapContainer>
           )
         ) : (
-          <p> cargando mapa... </p>
+          <p className="text-center"> cargando mapa... </p>
         )}
       </main>
     </div>

@@ -5,10 +5,29 @@ It was very frustrating trying to center with Tailwind CSS on position: absolute
 .centrar-div {
     position: absolute;
     top: 150px;
+    left: 10px;
+    right: 10px;
+    bottom: calc(100vh-180px);
+    margin: auto;
+}
+
+.contribution {
+    display: none;
+}
+
+@media only screen and (min-width: 640px) {
+    .centrar-div {
+        position: absolute;
+    top: 150px;
     left: 100px;
     right: 100px;
     bottom: calc(100vh-240px);
     margin: auto;
+    }
+
+    .contribution {
+        display: inherit;
+    }
 }
 
 @media only screen and (min-width: 1024px) {
